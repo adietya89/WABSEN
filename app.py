@@ -39,3 +39,33 @@ elif menu == "Peta":
 
 elif menu == "Galeri Foto":
     st.header("Galeri Foto")
+
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+import pandas as pd
+
+scope = [
+    "https://spreadsheets.google.com/feeds",
+    "https://www.googleapis.com/auth/drive"
+]
+
+creds = ServiceAccountCredentials.from_json_keyfile_name(
+    "credentials.json",
+    scope
+)
+
+client = gspread.authorize(creds)
+
+# Ganti dengan nama spreadsheet Anda
+spreadsheet = client.open("AKUN")
+
+# Sheet Pegawai
+sheet_pegawai = spreadsheet.worksheet("Sheet1")
+pegawai = pd.DataFrame(sheet_pegawai.get_all_records())
+
+# Sheet Absen
+sheet_absen = spreadsheet.worksheet("ABSEN")
+absen = pd.DataFrame(sheet_absen.get_all_records())
+
+print(pegawai.head())
+print(absen.head())
